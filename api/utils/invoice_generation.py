@@ -17,26 +17,24 @@ async def submit_new_invoice_request(start_date, end_date, callback, db_conn=Non
     start_date = start_date.date()
     end_date = end_date.date()
     rows = await db_conn.fetch(sql, start_date, end_date)
-    for r in rows:
-        print(r)
     invoices = {}
     for row in rows:
-        if row.calling in invoices:
-            invoices[row.calling].append([row.calling, row.start, row.price, row.cost])
+        if row['calling'] in invoices:
+            invoices[row['calling']].append([row['calling'], row['start'], row['price'], row['cost']])
         else:
-            invoices[row.calling] = [[row.calling, row.start, row.price, row.cost]]
+            invoices[row['calling']] = [[row['calling'], row['start'], row['price'], row['cost']]]
     for calling, data in invoices.items():
         count = len(data)
         summ = 0
         for d in data:
             summ += d[3]
-        await db_conn.execute(insert_invoice_sql, calling, start_date.date(), end_date.date(),
+        await db_conn.execute(insert_invoice_sql, calling, start_date, end_date,
                               summ, count)
     result = []
     db_invoices = await db_conn.fetch(invoice_sql)
     for invoice in db_invoices:
-        result.append({'id': invoice.id, 'calling': str(invoice.calling), 'start': row.start,
-                       'end': row.end, 'sum': row.sum, 'count': invoice.count})
+        result.append({'id': invoice['id'], 'calling': str(invoice['calling']), 'start': str(invoice['start']),
+                       'end': str(invoice['end']), 'sum': invoice['sum'], 'count': invoice['count']})
     await db_conn.close()
     master_uuid = uuid.uuid4().hex
     data = {'master_id': master_uuid, 'invoices': result}

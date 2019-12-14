@@ -1,6 +1,7 @@
 import json
 import math
 from datetime import datetime
+from decimal import Decimal
 
 import dateutil
 import pandas as pd
