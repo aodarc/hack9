@@ -249,7 +249,7 @@ async def listing(calling: str, request: Request):
 
         for record in records:
             record = dict(record)
-            record['start'] = record['start'].isoformat()
+            record['start'] = record['start'].isoformat() + 'Z'
             response_body['calls'].append(record)
 
         json_body = json.dumps(response_body)
