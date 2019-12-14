@@ -149,7 +149,7 @@ async def switch_call(data: dict):
 
         call_stats = get_call_stats_from_csv(
             calling=call_object.called,
-            time=str(call_object.start),
+            time=call_object.start.isoformat() + 'Z',
             dataframe=app.df
         )
         if not call_stats:
