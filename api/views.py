@@ -2,6 +2,7 @@ import json
 import math
 from datetime import datetime
 
+import dateutil
 import pandas as pd
 from pydantic.error_wrappers import ValidationError as pydanticValidationError
 from starlette.requests import Request
@@ -233,8 +234,8 @@ async def listing(calling: str, request: Request):
         'calls': []
     }
     try:
-        datetime_from = datetime.strptime(from_str, '%Y-%m-%dT%H:%M:%S.%fZ')
-        datetime_to = datetime.strptime(to_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+        datetime_from = dateutil.parser.parse(from_str).replace(tzinfo=None)
+        datetime_to = dateutil.parser.parse(to_str).replace(tzinfo=None)
 
         async with app.postgres.acquire() as con:
             records = await con.fetch(
@@ -257,8 +258,7 @@ async def listing(calling: str, request: Request):
                 "Content-type": "application/json"
             }
         )
-    except Exception as e:
-        raise e
+    except Exception:
         json_body = json.dumps(response_body)
         response = Response(
             content=json_body,
