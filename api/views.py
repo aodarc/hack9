@@ -1,7 +1,6 @@
 import json
 import math
 from datetime import datetime
-from decimal import Decimal
 
 import dateutil
 import pandas as pd
@@ -13,7 +12,7 @@ from api.models import CallData, CallDataInResponse, InvoiceData
 from api.queries import ADD_CALLS_RECORD, GET_INVOICE_RECORD_BY_ID, LISTING, GET_FINANCIAL_REPORTS_SUM, \
     GET_FINANCIAL_REPORTS_REMAINING
 from api.utils import invoice_generation
-from api.utils.cost_calculation_py import calculate_cost
+from api.utils import cost_calculation
 from . import app
 
 ERROR_400 = Response(content='{"message": "Incorrect input"}', status_code=400,
@@ -156,10 +155,10 @@ async def switch_call(data: dict):
         if not call_stats:
             return ERROR_400
 
-        cost = calculate_cost(
+        cost = cost_calculation.calculate_cost(
             initial=int(call_stats["initial"]),
             duration=int(call_object.duration),
-            increment=int(call_stats["increment"]),
+            increment=float(call_stats["increment"]),
             rate=float(call_stats["price"])
         )
         rounded = math.ceil((int(call_stats["initial"]) + int(call_object.duration)) / \

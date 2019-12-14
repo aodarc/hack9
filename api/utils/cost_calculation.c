@@ -6,7 +6,7 @@
         "depends": [],
         "name": "api.utils.cost_calculation",
         "sources": [
-            "cost_calculation.pyx"
+            "/Users/m.shchetinin/Desktop/r_and_d/hack9/api/utils/cost_calculation.pyx"
         ]
     },
     "module_name": "api.utils.cost_calculation"
@@ -896,13 +896,6 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
     const char* function_name);
 
-/* None.proto */
-static CYTHON_INLINE int __Pyx_div_int(int, int);
-
-/* UnaryNegOverflows.proto */
-#define UNARY_NEG_WOULD_OVERFLOW(x)\
-        (((x) < 0) & ((unsigned long)(x) == 0-(unsigned long)(x)))
-
 /* PyDictVersioning.proto */
 #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_TYPE_SLOTS
 #define __PYX_DICT_VERSION_INIT  ((PY_UINT64_T) -1)
@@ -1057,7 +1050,7 @@ static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_rate;
 static PyObject *__pyx_n_s_test;
-static PyObject *__pyx_pf_3api_5utils_16cost_calculation_calculate_cost(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_initial, int __pyx_v_duration, int __pyx_v_increment, float __pyx_v_rate); /* proto */
+static PyObject *__pyx_pf_3api_5utils_16cost_calculation_calculate_cost(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_initial, int __pyx_v_duration, float __pyx_v_increment, float __pyx_v_rate); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_codeobj__2;
 /* Late includes */
@@ -1065,8 +1058,8 @@ static PyObject *__pyx_codeobj__2;
 /* "api/utils/cost_calculation.pyx":4
  * 
  * 
- * def calculate_cost(int initial, int duration, int increment, float rate):             # <<<<<<<<<<<<<<
- *     return ceil((initial + duration) / increment) * increment * (rate / 60.0)
+ * def calculate_cost(int initial, int duration, float increment, float rate):             # <<<<<<<<<<<<<<
+ *     return ((ceil((initial + duration) / increment) * increment) * (rate / 60.0)) // 0.01 / 100
  */
 
 /* Python wrapper */
@@ -1075,7 +1068,7 @@ static PyMethodDef __pyx_mdef_3api_5utils_16cost_calculation_1calculate_cost = {
 static PyObject *__pyx_pw_3api_5utils_16cost_calculation_1calculate_cost(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_initial;
   int __pyx_v_duration;
-  int __pyx_v_increment;
+  float __pyx_v_increment;
   float __pyx_v_rate;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -1135,7 +1128,7 @@ static PyObject *__pyx_pw_3api_5utils_16cost_calculation_1calculate_cost(PyObjec
     }
     __pyx_v_initial = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_initial == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
     __pyx_v_duration = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_duration == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
-    __pyx_v_increment = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_increment == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
+    __pyx_v_increment = __pyx_PyFloat_AsFloat(values[2]); if (unlikely((__pyx_v_increment == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
     __pyx_v_rate = __pyx_PyFloat_AsFloat(values[3]); if (unlikely((__pyx_v_rate == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
@@ -1153,7 +1146,7 @@ static PyObject *__pyx_pw_3api_5utils_16cost_calculation_1calculate_cost(PyObjec
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3api_5utils_16cost_calculation_calculate_cost(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_initial, int __pyx_v_duration, int __pyx_v_increment, float __pyx_v_rate) {
+static PyObject *__pyx_pf_3api_5utils_16cost_calculation_calculate_cost(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_initial, int __pyx_v_duration, float __pyx_v_increment, float __pyx_v_rate) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -1162,20 +1155,16 @@ static PyObject *__pyx_pf_3api_5utils_16cost_calculation_calculate_cost(CYTHON_U
 
   /* "api/utils/cost_calculation.pyx":5
  * 
- * def calculate_cost(int initial, int duration, int increment, float rate):
- *     return ceil((initial + duration) / increment) * increment * (rate / 60.0)             # <<<<<<<<<<<<<<
+ * def calculate_cost(int initial, int duration, float increment, float rate):
+ *     return ((ceil((initial + duration) / increment) * increment) * (rate / 60.0)) // 0.01 / 100             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = (__pyx_v_initial + __pyx_v_duration);
   if (unlikely(__pyx_v_increment == 0)) {
-    PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
     __PYX_ERR(0, 5, __pyx_L1_error)
   }
-  else if (sizeof(int) == sizeof(long) && (!(((int)-1) > 0)) && unlikely(__pyx_v_increment == (int)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_t_1))) {
-    PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
-    __PYX_ERR(0, 5, __pyx_L1_error)
-  }
-  __pyx_t_2 = PyFloat_FromDouble(((ceil(__Pyx_div_int(__pyx_t_1, __pyx_v_increment)) * __pyx_v_increment) * (__pyx_v_rate / 60.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 5, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble((floor(((ceil((__pyx_t_1 / __pyx_v_increment)) * __pyx_v_increment) * (__pyx_v_rate / 60.0)) / 0.01) / 100.0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -1184,8 +1173,8 @@ static PyObject *__pyx_pf_3api_5utils_16cost_calculation_calculate_cost(CYTHON_U
   /* "api/utils/cost_calculation.pyx":4
  * 
  * 
- * def calculate_cost(int initial, int duration, int increment, float rate):             # <<<<<<<<<<<<<<
- *     return ceil((initial + duration) / increment) * increment * (rate / 60.0)
+ * def calculate_cost(int initial, int duration, float increment, float rate):             # <<<<<<<<<<<<<<
+ *     return ((ceil((initial + duration) / increment) * increment) * (rate / 60.0)) // 0.01 / 100
  */
 
   /* function exit code */
@@ -1269,8 +1258,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "api/utils/cost_calculation.pyx":4
  * 
  * 
- * def calculate_cost(int initial, int duration, int increment, float rate):             # <<<<<<<<<<<<<<
- *     return ceil((initial + duration) / increment) * increment * (rate / 60.0)
+ * def calculate_cost(int initial, int duration, float increment, float rate):             # <<<<<<<<<<<<<<
+ *     return ((ceil((initial + duration) / increment) * increment) * (rate / 60.0)) // 0.01 / 100
  */
   __pyx_tuple_ = PyTuple_Pack(4, __pyx_n_s_initial, __pyx_n_s_duration, __pyx_n_s_increment, __pyx_n_s_rate); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
@@ -1554,8 +1543,8 @@ if (!__Pyx_RefNanny) {
   /* "api/utils/cost_calculation.pyx":4
  * 
  * 
- * def calculate_cost(int initial, int duration, int increment, float rate):             # <<<<<<<<<<<<<<
- *     return ceil((initial + duration) / increment) * increment * (rate / 60.0)
+ * def calculate_cost(int initial, int duration, float increment, float rate):             # <<<<<<<<<<<<<<
+ *     return ((ceil((initial + duration) / increment) * increment) * (rate / 60.0)) // 0.01 / 100
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3api_5utils_16cost_calculation_1calculate_cost, NULL, __pyx_n_s_api_utils_cost_calculation); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -1754,14 +1743,6 @@ invalid_keyword:
     #endif
 bad:
     return -1;
-}
-
-/* None */
-static CYTHON_INLINE int __Pyx_div_int(int a, int b) {
-    int q = a / b;
-    int r = a - q*b;
-    q -= ((r != 0) & ((r ^ b) < 0));
-    return q;
 }
 
 /* PyDictVersioning */

@@ -1,7 +1,7 @@
 from .base import TestBase
 
 from api.utils.cost_calculation_py import calculate_cost
-from api.utils.api.utils import cost_calculation
+from api.utils import cost_calculation
 
 
 def test_calculate_cost(benchmark):
