@@ -413,8 +413,10 @@ async def financial_report(calling: str):
             GET_FINANCIAL_REPORTS_REMAINING,
             int(calling)
         )
+
+    rem = remaining.get('sum', 0)
     return {
         "calling": str(calling),
         "invoices": list(map(lambda x: {'id': str(x['id']), 'sum': str(x['sum'])}, invoices)),
-        "remaining": str(remaining.get('sum'))
+        "remaining": str(remaining.get('sum') if rem is not None else 0)
     }
