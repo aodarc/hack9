@@ -1,0 +1,36 @@
+---
+version: "3"
+services:
+  postgres_db:
+    image: postgres:11.5-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: hack9
+      POSTGRES_USER: hack9
+      POSTGRES_DB: hack9
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.data/postgres:/var/lib/postgresql/data/
+  api:
+    container_name: api_hack9
+    build:
+      context: .
+      dockerfile: dockerfiles/api.Dockerfile
+    depends_on:
+      - postgres_db
+    command: "uvicorn api:app --reload --host 0.0.0.0 --port 8000"
+    environment:
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: hack9
+      POSTGRES_PASS: hack9
+      POSTGRES_USER: hack9
+    links:
+      - postgres_db:postgres_db
+    ports:
+      - "8000:8000"
+      - "8008:8008" # Pycharm
+    volumes:
+      - .:/project
