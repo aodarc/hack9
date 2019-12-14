@@ -185,13 +185,14 @@ async def switch_call(data: dict):
             }
         )
     except Exception as e:
-        response = Response(
-            content='{"message": "Error occurred"}',
-            status_code=400,
-            headers={
-                "Content-type": "application/json"
-            }
-        )
+        raise e
+        # response = Response(
+        #     content='{"message": "Error occurred"}',
+        #     status_code=400,
+        #     headers={
+        #         "Content-type": "application/json"
+        #     }
+        # )
     return response
 
 
