@@ -10,8 +10,8 @@ from starlette.responses import Response
 from api.models import CallData, CallDataInResponse, InvoiceData
 from api.queries import ADD_CALLS_RECORD, GET_INVOICE_RECORD_BY_ID, LISTING, GET_FINANCIAL_REPORTS_SUM, \
     GET_FINANCIAL_REPORTS_REMAINING
-from api.utils.cost_calculation_py import calculate_cost
 from api.utils import invoice_generation
+from api.utils.cost_calculation_py import calculate_cost
 from . import app
 
 ERROR_400 = Response(content='{"message": "Incorrect input"}', status_code=400,
@@ -177,7 +177,8 @@ async def switch_call(data: dict):
                 float(call_object.cost)
             )
             # call_object.id = str(row.inserted_id)
-            response = CallDataInResponse(call_data=call_object.dict()).call_data
+            ## CallDataInResponse(call_data=call_object.dict()).call_data
+            response = {key: str(v) for key, v in call_object.dict().items()}
     except pydanticValidationError:
         response = Response(
             content='{"message": "Incorrect input"}',
