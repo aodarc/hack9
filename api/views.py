@@ -269,7 +269,7 @@ async def listing(calling: str, request: Request):
     return response
 
 
-@app.post("/financial/invoice", status_code=202)
+# @app.post("/financial/invoice", status_code=202)
 async def financial_invoice(invoice: InvoiceData):
     """
     :description:
