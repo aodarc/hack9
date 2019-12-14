@@ -168,8 +168,8 @@ async def switch_call(data: dict):
         async with app.postgres.acquire() as con:
             await con.execute(
                 ADD_CALLS_RECORD,
-                call_object.calling,
-                call_object.called,
+                int(call_object.calling),
+                int(call_object.called),
                 call_object.start.replace(tzinfo=None),
                 call_object.duration,
                 call_object.rounded,
