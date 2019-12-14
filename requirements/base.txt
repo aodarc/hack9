@@ -4,3 +4,4 @@ uvloop==0.14.0
 pandas==0.25.3
 fastapi==0.45.0
 pydantic==1.2
+httpx==0.9.4
