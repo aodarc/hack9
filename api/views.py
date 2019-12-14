@@ -181,7 +181,7 @@ async def switch_call(data: dict):
             )
             # call_object.id = str(row.inserted_id)
             # response = {key: str(v) for key, v in call_object.dict().items()}
-            response = CallDataInResponse(call_data=call_object.dict()).call_data
+            response = call_object.dict()
     except pydanticValidationError:
         response = Response(
             content='{"message": "Incorrect input"}',
