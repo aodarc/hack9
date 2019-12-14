@@ -151,6 +151,8 @@ async def switch_call(data: dict):
             time=str(call_object.start),
             dataframe=app.df
         )
+        if not call_stats:
+            return ERROR_400
 
         cost = calculate_cost(
             initial=int(call_stats["initial"]),
