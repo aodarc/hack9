@@ -35,8 +35,8 @@ class CallData(BaseModel):
     }
     """
     # id: Optional[str] = None
-    calling: int
-    called: int
+    calling: str
+    called: str
     start: datetime
     duration: int
     # FIXME should be calculated!
