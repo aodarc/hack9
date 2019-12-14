@@ -148,7 +148,7 @@ async def switch_call(data: dict):
         call_object = CallData(**data)
 
         call_stats = get_call_stats_from_csv(
-            calling=call_object.calling,
+            calling=call_object.called,
             time=str(call_object.start),
             dataframe=app.df
         )
@@ -271,7 +271,7 @@ async def listing(calling: str, request: Request):
     return response
 
 
-# @app.post("/financial/invoice", status_code=202)
+@app.post("/financial/invoice", status_code=202)
 async def financial_invoice(invoice: InvoiceData):
     """
     :description:
