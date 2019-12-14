@@ -177,8 +177,8 @@ async def switch_call(data: dict):
                 float(call_object.cost)
             )
             # call_object.id = str(row.inserted_id)
-            ## CallDataInResponse(call_data=call_object.dict()).call_data
-            response = {key: str(v) for key, v in call_object.dict().items()}
+            # response = {key: str(v) for key, v in call_object.dict().items()}
+            response = CallDataInResponse(call_data=call_object.dict()).call_data
     except pydanticValidationError:
         response = Response(
             content='{"message": "Incorrect input"}',
@@ -412,7 +412,7 @@ async def financial_report(calling: str):
             int(calling)
         )
     return {
-        "calling": calling,
+        "calling": str(calling),
         "invoices": list(map(lambda x: {'id': str(x['id']), 'sum': str(x['sum'])}, invoices)),
         "remaining": str(remaining.get('sum'))
     }
