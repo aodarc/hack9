@@ -8,6 +8,11 @@ async def submit_new_invoice_request(start_date, end_date, callback, db_conn=Non
     sql = """
         SELECT id, calling, called, start, duration, rounded, price, cost, in_invoice FROM calls WHERE start>=$1 AND start<=$2 ORDER BY id;
     """
+    update_calls = """
+    UPDATE calls
+    SET in_invoice=TRUE
+    WHERE start>=$1 AND start<=$2
+    """
     insert_invoice_sql = """
         INSERT INTO invoice(calling, start, "end", sum, count) VALUES ($1, $2, $3, $4, $5);
     """
@@ -30,6 +35,8 @@ async def submit_new_invoice_request(start_date, end_date, callback, db_conn=Non
             summ += d[3]
         await db_conn.execute(insert_invoice_sql, calling, start_date, end_date,
                               summ, count)
+
+    await db_conn.fetch(update_calls, start_date, end_date)
     result = []
     db_invoices = await db_conn.fetch(invoice_sql)
     for invoice in db_invoices:
