@@ -257,7 +257,8 @@ async def listing(calling: str, request: Request):
                 "Content-type": "application/json"
             }
         )
-    except Exception:
+    except Exception as e:
+        raise e
         json_body = json.dumps(response_body)
         response = Response(
             content=json_body,
