@@ -1,3 +1,4 @@
+import functools
 import json
 import math
 from datetime import datetime
@@ -23,14 +24,20 @@ ERROR_404 = Response(content='{"message": "No in DB"}', status_code=404,
 MAX_PREFIX_SIZE = 9
 
 
-def get_call_stats_from_csv(dataframe, time, calling):
+@functools.lru_cache(maxsize=512)
+def get_call_stats_from_csv_part1(dataframe, calling):
     rows = pd.DataFrame()
     calling = str(calling)
     for i in range(MAX_PREFIX_SIZE, 0, -1):
         rows = dataframe.loc[dataframe.prefix == int(calling[:i])]
         if not rows.empty:
-            rows = rows.loc[(rows.startDate <= time)].sort_values('startDate').tail(1)
-            break
+            return rows
+    return rows
+
+
+def get_call_stats_from_csv(dataframe, time, calling):
+    calling = str(calling)
+    rows = get_call_stats_from_csv_part1(dataframe, calling[:9])
 
     if rows.empty:
         return {}
@@ -60,36 +67,6 @@ async def reset():
 
 @app.get("/switch/price")
 async def switch_price(number: str, time: str = ""):
-    """
-    :param number: *required. Telephone number to call, for which the call price should be returned. Example: 38121123456
-    :param time: not required. Example: 2019-04-03T12:34:56.00Z
-    :return:
-        - 200  Price of a call, per second
-            - Headers
-                - Content-type: application/json
-            - Body
-                {
-                    "prefix": "381 21",
-                    "price": "1.2",
-                    "from": "2019-01-01T00:00:00.00Z",
-                    "initial": "10",
-                    "increment": "5"
-                }
-        - 400  Call number is invalid format
-            - Headers
-                - Content-type: application/json
-            - Body
-                {
-                    "message": "Call number is invalid format"
-                }
-        - 404  Price for the number cannot be calculated
-            - Headers
-                - Content-type: application/json
-            - Body
-                {
-                    "message": "Price for the number cannot be calculated"
-                }
-    """
     if not number or not number.isdigit() or len(number) > 15:
         return ERROR_400
 
@@ -106,50 +83,11 @@ async def switch_price(number: str, time: str = ""):
 
 @app.post("/switch/call")
 async def switch_call(data: dict):
-    """Register details of a call that was made and calcualte the cost of the call.
-        - Request data:
-            {
-                "calling": "381211234567",
-                "called": "38164111222333",
-                "start": "2019-05-23T21:03:33.30Z",
-                "duration": "450"
-            }
-
-    :param data:
-    :return:
-        - 200  Call accepted
-            - Headers
-                - Content-type: application/json
-            - Body
-                {
-                    "calling": "381211234567",
-                    "called": "38164111222333",
-                    "start": "2019-05-23T21:03:33.30Z",
-                    "duration": "350",
-                    "rounded": "355",
-                    "price": "0.4",
-                    "cost": "2.367"
-                }
-        - 400  Incorrect input
-            - Headers
-                - Content-type: application/json
-            - Body
-                {
-                    "message": "Incorrect input"
-                }
-        - 400  Incorrect input
-            - Headers
-                - Content-type: application/json
-            - Body
-                {
-                    "message": "Error occurred"
-                }
-    """
     try:
         call_object = CallData(**data)
 
         call_stats = get_call_stats_from_csv(
-            calling=call_object.called,
+            calling=str(call_object.called),
             time=call_object.start.isoformat() + 'Z',
             dataframe=app.df
         )

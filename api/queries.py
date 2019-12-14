@@ -38,6 +38,12 @@ count bigint
 );
 
 alter table invoice owner to hack9;
+
+create index if not exists invoice_start_index
+on invoice (start);
+
+create index if not exists invoice_end_index
+on invoice ("end");
 """
 
 #######################################################
