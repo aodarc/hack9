@@ -41,8 +41,8 @@ class CallData(BaseModel):
     duration: int
     # FIXME should be calculated!
     rounded: int = 1
-    price: float = 1
-    cost: float = 1
+    price: float = 1.
+    cost: float = 1.
 
 
 class InvoiceData(BaseModel):

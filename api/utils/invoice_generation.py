@@ -6,7 +6,6 @@ import httpx
 async def submit_new_invoice_request(start_date, end_date, callback, db_conn=None):
     """Create invoices for all numbers in selected date range."""
     sql = """
-        SELECT id FROM calls WHERE start>=$1 AND start<=$2 ORDER BY id;
         SELECT id, calling, called, start, duration, rounded, price, cost, in_invoice FROM calls WHERE start>=$1 AND start<=$2 ORDER BY id;
     """
     insert_invoice_sql = """
