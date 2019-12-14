@@ -161,7 +161,8 @@ async def switch_call(data: dict):
             increment=int(call_stats["increment"]),
             rate=float(call_stats["price"])
         )
-        rounded = math.ceil(int(call_object.duration) * int(call_stats["increment"])) / int(call_stats["increment"])
+        rounded = math.ceil((int(call_stats["initial"]) + int(call_object.duration)) / \
+        int(call_stats["increment"])) * int(call_stats["increment"])
         call_object.price = call_stats["price"]
         call_object.cost = cost
         call_object.rounded = rounded
@@ -248,7 +249,7 @@ async def listing(calling: str, request: Request):
 
         for record in records:
             record = dict(record)
-            record['start'] = record['start'].strftime('%Y-%m-%dT%H:%M:%S.%f')[:-4] + 'Z'
+            record['start'] = record['start'].isoformat() + 'Z'
             response_body['calls'].append(record)
 
         json_body = json.dumps(response_body)
