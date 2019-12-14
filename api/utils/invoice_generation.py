@@ -14,8 +14,8 @@ async def submit_new_invoice_request(start_date, end_date, callback, db_conn=Non
     invoice_sql = """
         SELECT * FROM invoice;
     """
-    start_date = start_date.date()
-    end_date = end_date.date()
+    # start_date = start_date.date()
+    # end_date = end_date.date()
     rows = await db_conn.fetch(sql, start_date, end_date)
     invoices = {}
     for row in rows:
