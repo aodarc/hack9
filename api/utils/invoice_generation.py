@@ -38,4 +38,6 @@ async def submit_new_invoice_request(start_date, end_date, callback, db_conn=Non
     await db_conn.close()
     master_uuid = uuid.uuid4().hex
     data = {'master_id': master_uuid, 'invoices': result}
-    await httpx.post(callback, json=data)
+
+    print(callback, 'AAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    await httpx.post(callback, json=data, timeout=30)
