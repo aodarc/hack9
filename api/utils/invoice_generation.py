@@ -8,4 +8,5 @@ async def submit_new_invoice_request(start_date, end_date, callback, db_conn=Non
     rows = await db_conn.fetch(sql, start_date, end_date)
     for r in rows:
         print(r)
+        generate_invoices.delay()
     await db_conn.close()

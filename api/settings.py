@@ -7,3 +7,6 @@ POSTGRES_PORT = int(os.environ.get("POSTGRES_PORT", 5432))
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "postgres_db")
 
 POSTGRES_URL = f"postgres://{POSTGRES_USER}:{POSTGRES_PASS}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+broker_url = ""
+AWS_ACCESS_KEY = ""
+AWS_SECRET_KEY = ""
