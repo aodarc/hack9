@@ -248,7 +248,7 @@ async def listing(calling: str, request: Request):
 
         for record in records:
             record = dict(record)
-            record['start'] = record['start'].strftime('%Y-%m-%dT%H:%M:%S.%f')[:-4] + 'Z'
+            record['start'] = record['start'].isoformat()
             response_body['calls'].append(record)
 
         json_body = json.dumps(response_body)
