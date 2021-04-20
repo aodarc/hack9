@@ -1,4 +1,4 @@
-asyncpg==0.20.0
+asyncpg==0.21.0
 uvicorn==0.10.8
 uvloop==0.14.0
 pandas==0.25.3
